@@ -3,10 +3,19 @@ import matplotlib.animation as animation
 import numpy as np
 import seaborn
 import random
+import math
+from enum import Enum
+
+class prescribed_boundaries(Enum):
+    flux = 1
+    temperature = 2
+    newtonian = 3
 
 t = 0           #simulation time
-dt = .05        #time step
-alpha = 100000     #thermal constant
+dt = .5        #time step
+alpha = 10  #thermal constant
+Q = 100        #Heat production
+boundaryConditions = [prescribed_boundaries.temperature, prescribed_boundaries.temperature, prescribed_boundaries.temperature, prescribed_boundaries.temperature]
 
 def fill_2d_array(rows, cols, min_value=0, max_value=100):
     # Create a 2D array (list of lists) filled with random values
@@ -18,7 +27,7 @@ def fill_2d_array(rows, cols, min_value=0, max_value=100):
         array.append(row)
     return np.array(array)
 
-def plot_heatmap( data, title = "Temperature", cmap = "viridis", annot=False ):
+def plot_heatmap( data, title = "Temperature", cmap="inferno", annot=False ):
     plt.figure(figsize=(10, 8))
     seaborn.heatmap(data, annot=annot, cmap=cmap,)
     plt.title(title)
@@ -30,9 +39,13 @@ def forcing_function(data, time):
     for i in range( 1, len(data) - 1):
         for j in range( 1, len(data[i]) - 1):
             if( i > 0 ):
-                tempChange[i][j] = approx_laplacian(data, i , j) + 1000*np.sin(t)
+                tempChange[i][j] = approx_laplacian(data, i , j)
     return tempChange
     
+def gaussian_2d(x, y):
+    r = math.sqrt( x**2 + y**2)
+    return math.e**( -1 * r**2)
+
 def approx_laplacian(data, x , y):
     dx1 = data[x][y] - data[x - 1][y]
     dx2 = data[x + 1][y] - data[x][y]
@@ -42,7 +55,7 @@ def approx_laplacian(data, x , y):
     dy2 = data[x][y + 1] - data[x][y]
     ddy = dy1 - dy2
     
-    return ddx + ddy
+    return ddx - ddy
     
   
 def animate(i):
@@ -54,6 +67,48 @@ def update_heat(data):
     global t
     t += dt
     data += forcing_function(data, t )*dt
+    boundary_conds_update(data)
+    
+def boundary_conds_update(data):
+    #boundary cond 1: -x
+    
+    for i in range(len(boundaryConditions)):
+        if boundaryConditions[i] == prescribed_boundaries.flux:
+            #do something
+            boundaryFunction = flux_boundary
+        elif boundaryConditions[i] == prescribed_boundaries.temperature:
+            #something else
+            boundaryFunction = temperature_boundary
+        elif boundaryConditions[i] == prescribed_boundaries.newtonian:
+            #something else 
+            boundaryFunctionn = newtonian_boundary
+        
+        if i == 0:
+            for y in range(0, len(data)):
+                boundaryFunction(data, y, 0)
+        elif i == 1:
+            for x in range(0, len(data[0])):
+                boundaryFunction(data, 0, x)
+        elif i == 2:
+            for y in range(0, len(data)):
+                boundaryFunction(data, y, len(data) - 1)
+        elif i == 3:
+            for x in range(0, len(data[0])):
+                boundaryFunction(data, len(data[0]) - 1, x)
+        
+
+def flux_boundary(data, x, y):
+    flux_rate = 10
+    data[x][y] -= flux_rate 
+
+def temperature_boundary(data, x, y):
+    temp = 100
+    data[x][y] = temp
+
+def newtonian_boundary(data, x, y):
+    outer_temp = 50
+    alpha2 = .1 #thermal conductivity
+    data[x][y] += (outer_temp - data[x][y]) * alpha2 * dt
       
                 
 # Example usage
