@@ -1,9 +1,13 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
+<<<<<<< Updated upstream
 import seaborn
 import random
 import math
+=======
+import seaborn as sns
+>>>>>>> Stashed changes
 from enum import Enum
 
 class prescribed_boundaries(Enum):
@@ -11,6 +15,7 @@ class prescribed_boundaries(Enum):
     temperature = 2
     newtonian = 3
 
+<<<<<<< Updated upstream
 t = 0           #simulation time
 dt = .5        #time step
 alpha = 10  #thermal constant
@@ -26,12 +31,23 @@ def fill_2d_array(rows, cols, min_value=0, max_value=100):
             row.append((random.random() * (max_value - min_value) + min_value) )
         array.append(row)
     return np.array(array)
+=======
+t = 0          # Simulation time
+dt = 0.1       # Time step
+alpha = 2      # Thermal constant
+Q = 10         # Heat production
+boundaryConditions = [PrescribedBoundaries.TEMPERATURE, PrescribedBoundaries.TEMPERATURE, PrescribedBoundaries.TEMPERATURE, PrescribedBoundaries.TEMPERATURE ]
+
+def fill_2d_array(rows, cols, min_value=0, max_value=100):
+    return np.random.uniform(min_value, max_value, (rows, cols))
+>>>>>>> Stashed changes
 
 def plot_heatmap( data, title = "Temperature", cmap="inferno", annot=False ):
     plt.figure(figsize=(10, 8))
     seaborn.heatmap(data, annot=annot, cmap=cmap,)
     plt.title(title)
     plt.show()
+<<<<<<< Updated upstream
     
 def forcing_function(data, time):
     #use the 2d heat equation: du/dt = a( d^2h/dx^2 + d^2h/dy^2)
