@@ -13,7 +13,7 @@ class PrescribedBoundaries(Enum):
 
 t = 0          # Simulation time
 dt = 0.1       # Time step
-alpha = .9     # Thermal constant
+alpha = 2     # Thermal constant
 Q = 10         # Heat production
 boundaryConditions = [PrescribedBoundaries.TEMPERATURE, PrescribedBoundaries.TEMPERATURE, PrescribedBoundaries.TEMPERATURE, PrescribedBoundaries.TEMPERATURE]
 
