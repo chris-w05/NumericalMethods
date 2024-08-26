@@ -4,10 +4,10 @@ import numpy as np
 import seaborn as sns
 from enum import Enum
 
-class prescribed_boundaries(Enum):
-    flux = 1
-    temperature = 2
-    newtonian = 3
+class PrescribedBoundaries(Enum):
+    FLUX = 1
+    TEMPERATURE = 2
+    NEWTONIAN = 3
 
 t = 0          # Simulation time
 dt = 0.1       # Time step
@@ -18,34 +18,21 @@ boundaryConditions = [PrescribedBoundaries.TEMPERATURE, PrescribedBoundaries.TEM
 def fill_2d_array(rows, cols, min_value=0, max_value=100):
     return np.random.uniform(min_value, max_value, (rows, cols))
 
-def fill_2d_array(rows, cols, min_value=0, max_value=100):
-    return np.random.uniform(min_value, max_value, (rows, cols))
->>>>>>> Stashed changes
-
-def plot_heatmap( data, title = "Temperature", cmap="inferno", annot=False ):
+def plot_heatmap(data, title="Temperature", cmap="viridis", annot=False):
     plt.figure(figsize=(10, 8))
-    seaborn.heatmap(data, annot=annot, cmap=cmap,)
+    sns.heatmap(data, annot=annot, cmap=cmap)
     plt.title(title)
     plt.show()
 
 def forcing_function(data):
     tempChange = np.zeros_like(data)
     # Compute Laplacian for all cells, including boundaries
-    tempChange += alpha * approx_laplacian(data)
+    tempChange += alpha * approx_laplacian(data) - Q * gaussian_2d(data)
     return tempChange
 
 def approx_laplacian(data):
     # Laplacian calculation with consideration of boundaries
     laplacian = np.zeros_like(data)
-    
-def gaussian_2d(x, y):
-    r = math.sqrt( x**2 + y**2)
-    return math.e**( -1 * r**2)
-
-def approx_laplacian(data, x , y):
-    dx1 = data[x][y] - data[x - 1][y]
-    dx2 = data[x + 1][y] - data[x][y]
-    ddx = dx1 - dx2
     
     # Interior
     laplacian[1:-1, 1:-1] = (
@@ -55,9 +42,6 @@ def approx_laplacian(data, x , y):
         np.roll(data, 1, axis=1)[1:-1, 1:-1] - 
         4 * data[1:-1, 1:-1]
     )
-    dy1 = data[x][y] - data[x][y - 1]
-    dy2 = data[x][y + 1] - data[x][y]
-    ddy = dy1 - dy2
     
     # Edges (simplified for clarity)
     laplacian[0, 1:-1] = data[1, 1:-1] + data[0, :-2] + data[0, 2:] - 3 * data[0, 1:-1]
@@ -73,13 +57,21 @@ def approx_laplacian(data, x , y):
     
     return laplacian
 
+def gaussian_2d(data):
+    array = np.zeros_like(data)
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            r = np.sqrt( (i - len(data)/2)**2 + (j - len(data[i])/2)**2)
+            array[i][j] = np.e**(-(.1*r)**2)
+    return array
+
 def update_heat(data):
     global t
     dt = .1 * np.e**(.001*t)
     t += dt
-    data += forcing_function(data, t )*dt
+    data += forcing_function(data) * dt
     boundary_conds_update(data)
-    
+
 def boundary_conds_update(data):
     boundary_funcs = {
         PrescribedBoundaries.FLUX: flux_boundary,
