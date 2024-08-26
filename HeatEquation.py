@@ -27,7 +27,7 @@ def plot_heatmap(data, title="Temperature", cmap="viridis", annot=False):
 def forcing_function(data):
     tempChange = np.zeros_like(data)
     # Compute Laplacian for all cells, including boundaries
-    tempChange += alpha * approx_laplacian(data) - Q * gaussian_2d(data)
+    tempChange += alpha * approx_laplacian(data) -.05
     return tempChange
 
 def approx_laplacian(data):
@@ -101,6 +101,7 @@ def flux_boundary(data, x, y):
 
 def temperature_boundary(data, x, y):
     temp = 0
+    #specific boundary temperatures
     if( x < 1):
         temp = 60
     if( y < 1):
