@@ -134,6 +134,101 @@ min_value = 1
 max_value = 10
 
 random_array = fill_2d_array(rows, cols, min_value, max_value)
+=======
+
+def forcing_function(data):
+    tempChange = np.zeros_like(data)
+    # Compute Laplacian for all cells, including boundaries
+    tempChange += alpha * approx_laplacian(data)
+    return tempChange
+
+def approx_laplacian(data):
+    # Laplacian calculation with consideration of boundaries
+    laplacian = np.zeros_like(data)
+    
+    # Interior
+    laplacian[1:-1, 1:-1] = (
+        np.roll(data, -1, axis=0)[1:-1, 1:-1] + 
+        np.roll(data, 1, axis=0)[1:-1, 1:-1] +
+        np.roll(data, -1, axis=1)[1:-1, 1:-1] + 
+        np.roll(data, 1, axis=1)[1:-1, 1:-1] - 
+        4 * data[1:-1, 1:-1]
+    )
+    
+    # Edges (simplified for clarity)
+    laplacian[0, 1:-1] = data[1, 1:-1] + data[0, :-2] + data[0, 2:] - 3 * data[0, 1:-1]
+    laplacian[-1, 1:-1] = data[-2, 1:-1] + data[-1, :-2] + data[-1, 2:] - 3 * data[-1, 1:-1]
+    laplacian[1:-1, 0] = data[1:-1, 1] + data[:-2, 0] + data[2:, 0] - 3 * data[1:-1, 0]
+    laplacian[1:-1, -1] = data[1:-1, -2] + data[:-2, -1] + data[2:, -1] - 3 * data[1:-1, -1]
+    
+    # Corners
+    laplacian[0, 0] = data[0, 1] + data[1, 0] - 2 * data[0, 0]
+    laplacian[0, -1] = data[0, -2] + data[1, -1] - 2 * data[0, -1]
+    laplacian[-1, 0] = data[-2, 0] + data[-1, 1] - 2 * data[-1, 0]
+    laplacian[-1, -1] = data[-1, -2] + data[-2, -1] - 2 * data[-1, -1]
+    
+    return laplacian
+
+def update_heat(data):
+    global t
+    dt = .1 * np.e**(.001*t)
+    t += dt
+    data += forcing_function(data) * dt
+    boundary_conds_update(data)
+
+def boundary_conds_update(data):
+    boundary_funcs = {
+        PrescribedBoundaries.FLUX: flux_boundary,
+        PrescribedBoundaries.TEMPERATURE: temperature_boundary,
+        PrescribedBoundaries.NEWTONIAN: newtonian_boundary,
+    }
+
+    for i, boundaryCondition in enumerate(boundaryConditions):
+        boundaryFunction = boundary_funcs[boundaryCondition]
+
+        if i == 0:  # Left
+            for y in range(len(data)):
+                boundaryFunction(data, y, 0)
+        elif i == 1:  # Top
+            for x in range(len(data[0])):
+                boundaryFunction(data, 0, x)
+        elif i == 2:  # Right
+            for y in range(len(data)):
+                boundaryFunction(data, y, len(data[0]) - 1)
+        elif i == 3:  # Bottom
+            for x in range(len(data[0])):
+                boundaryFunction(data, len(data) - 1, x)
+
+def flux_boundary(data, x, y):
+    flux_rate = 0.05
+    data[x, y] -= flux_rate
+
+def temperature_boundary(data, x, y):
+    temp = 0
+    if( x < 1):
+        temp = 60
+    if( y < 1):
+        temp = 10
+    if(x > len(data) - 2):
+        temp = 60
+    if(y > len(data[x] - 2)):
+        temp = 10
+    data[x, y] = temp
+
+def newtonian_boundary(data, x, y):
+    outer_temp = 10
+    alpha2 = 2  # Thermal conductivity
+    data[x, y] += (outer_temp - data[x, y]) * alpha2 * dt
+
+def animate(i):
+    update_heat(random_array)
+    ax.clear()
+    sns.heatmap(random_array, cmap="coolwarm", cbar=False, ax=ax, annot=False)
+
+# Example usage
+rows, cols = 100, 100
+random_array = fill_2d_array(rows, cols)
+>>>>>>> Stashed changes
 fig, ax = plt.subplots(figsize=(10, 8))
 ani = animation.FuncAnimation(fig, animate, frames=200, interval=50)
 
