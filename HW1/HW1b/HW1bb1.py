@@ -1,3 +1,6 @@
+#Bonus problems
+
+#Converting binary to decimal
 number = 0b11111111
 numberStr = "11111111"
 origStr = numberStr
@@ -8,10 +11,15 @@ while len(numberStr) > 0:
     
 print("Converting " + origStr + " to decimal yields %d" % output)
 
+#Converting decimal to binary
+#follows the remainder formula for converting decimal to binary
 number = 11111111
+sign = "0" if number > 0 else "1"
 output = ""
-while number > 0:
-    output += number % 2
-    number /2
+while abs(number) > 0:
+    output += str(number % 2)
+    number = int(number/ 2)
 
-print("Converting " + origStr + "in decimal to bimnry yields %d" % output)
+
+
+print("Converting " + origStr + "in decimal to singed binary yields " + sign + output)
