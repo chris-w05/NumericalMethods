@@ -9,7 +9,8 @@ formula2RelErrors = []  #relative errors from formula 2
 valueToFind = 5         #value in -exponent to find
 trueValue = np.e**-5    #value to compare to
 
-#factorial formula, could have use the gamma function in the numpy library, but this is probably more resource efficient
+#factorial formula, could have use the gamma function in the numpy library, but 
+# this is probably more resource efficient
 def factorial(value):
     result = 1
     while value > 0:
@@ -52,12 +53,12 @@ for i in range(1, 21):
 
 data = {
     ('Formula 1', 'Value'): formula1Data,
-    ('Formula 1', 'εt%'): [np.abs((x - trueValue)/x) * 100 for x in formula1Data],
-    ('Formula 1', 'εa%'): formula1RelErrors,
+    ('Formula 1', 'true error %'): [np.abs((x - trueValue)/x) * 100 for x in formula1Data],
+    ('Formula 1', 'approx error %'): formula1RelErrors,
     ('',''): '',
     ('Formula 2', 'Value'): formula2Data,
-    ('Formula 2', 'εt%'): [np.abs((x - trueValue)/x) * 100 for x in formula2Data],
-    ('Formula 2', 'εa%'): formula2RelErrors
+    ('Formula 2', 'true error %'): [np.abs((x - trueValue)/x) * 100 for x in formula2Data],
+    ('Formula 2', 'approx error %'): formula2RelErrors
 } 
 
 dataFrame = pd.DataFrame(data)
@@ -68,4 +69,5 @@ dataFrame.index.name = 'Terms'
 print("Expected value: " + str(np.e**-5))
 print(dataFrame)
 
-#Looking at the table, the second fomula has the least error. Also notable is how the error converges much much more quickly and consistently than the first formula
+#Looking at the table, the second fomula has the least error. Also notable is how the 
+# error converges much much more quickly and consistently than the first formula
