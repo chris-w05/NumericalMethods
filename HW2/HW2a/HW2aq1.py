@@ -9,6 +9,7 @@ import math
 def error(val1, val2):
     return 100 * (val1 - val2)/val2
 
+#returns value for cosine derivatives
 def derivativeCos(x, level):
     level = level % 4
     if(level == 0):
@@ -28,6 +29,10 @@ def taylor_approx(x, x1, n ):
     for i in range(0, n):
         sum += (derivativeCos(x,i) * ((h)**i)) / math.factorial(i)
     return sum
+
+#error from taylor approx method
+def taylor_error(x, x1, n):
+    return error( taylor_approx(x, x1, n), math.cos(x1))
     
 #number of terms to compute
 nVals = [i + 1 for i in range(0,5)]
@@ -35,15 +40,15 @@ trueErrors = []
 
 #computing values at x values
 for n in nVals:
-    value = taylor_approx(.25, 1,n)
-    trueErrors.append(error(value, math.cos(1)))
+    trueErrors.append(taylor_error(.25, 1, n))
     
 #plotting
 plt.figure(figsize=(10,8))
 plt.plot(nVals,trueErrors)
 plt.title("Values by n terms")  
-plt.ylabel("Estimated value")
+plt.ylabel("Error percentage")
 plt.xlabel("Number of terms")
+plt.grid("on")
 plt.show()
 
 #The error rapidly approches zero. This approches the true value of cos(x) is a much faster method than euler's
