@@ -53,11 +53,11 @@ for i in range(1, 21):
 
 data = {
     ('Formula 1', 'Value'): formula1Data,
-    ('Formula 1', 'true error %'): [np.abs((x - trueValue)/x) * 100 for x in formula1Data],
+    ('Formula 1', 'true error %'): [np.abs((x - trueValue)/trueValue) * 100 for x in formula1Data],
     ('Formula 1', 'approx error %'): formula1RelErrors,
     ('',''): '',
     ('Formula 2', 'Value'): formula2Data,
-    ('Formula 2', 'true error %'): [np.abs((x - trueValue)/x) * 100 for x in formula2Data],
+    ('Formula 2', 'true error %'): [np.abs((x - trueValue)/trueValue) * 100 for x in formula2Data],
     ('Formula 2', 'approx error %'): formula2RelErrors
 } 
 

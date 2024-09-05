@@ -117,11 +117,16 @@ y_vals_at_2 = []
 for h in h_vals:
     y_vals_at_2.append(simulate_no_store(h, 2))
 
+#finding erors 
+errors = [0]
+for i in range(1, len(y_vals_at_2)):
+    errors.append(100 * (y_vals_at_2[i] - y_vals_at_2[i-1])/y_vals_at_2[i-1] )
+
 plt.figure(figsize =(10,8))
-plt.plot(h_vals, y_vals_at_2)
+plt.plot(h_vals, errors)
 plt.xlabel('Time step size')
-plt.ylabel('Y level')
+plt.ylabel('Relative error percent')
 plt.grid(True)
-plt.title("Water level at t=2 for different h")
+plt.title("Relative error at t=2 for different h")
 plt.show()
 

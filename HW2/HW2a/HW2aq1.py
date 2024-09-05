@@ -1,0 +1,51 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+
+
+# Q1: compute the taylor series approximation of f(x) = cos(x)
+
+#finds percent error between two values
+def error(val1, val2):
+    return 100 * (val1 - val2)/val2
+
+def derivativeCos(x, level):
+    level = level % 4
+    if(level == 0):
+        return math.cos(x)
+    elif( level == 1):
+        return -math.sin(x)
+    elif(level == 2):
+        return -math.cos(x)
+    elif( level == 3):
+        return math.sin(x)
+    
+
+#use taylor series to estimate value
+def taylor_approx(x, x1, n ):
+    sum = 0
+    h = x1 - x
+    for i in range(0, n):
+        sum += (derivativeCos(x,i) * ((h)**i)) / math.factorial(i)
+    return sum
+    
+#number of terms to compute
+nVals = [i + 1 for i in range(0,5)]
+trueErrors = []
+
+#computing values at x values
+for n in nVals:
+    value = taylor_approx(.25, 1,n)
+    trueErrors.append(error(value, math.cos(1)))
+    
+#plotting
+plt.figure(figsize=(10,8))
+plt.plot(nVals,trueErrors)
+plt.title("Values by n terms")  
+plt.ylabel("Estimated value")
+plt.xlabel("Number of terms")
+plt.show()
+
+#The error rapidly approches zero. This approches the true value of cos(x) is a much faster method than euler's
+
+    
