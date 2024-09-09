@@ -11,6 +11,7 @@ def f(x):
 x = np.arange(-5, 5, .1)
 y = f(x)
 
+'''
 plt.figure()
 plt.plot(x,y)
 plt.grid("on")
@@ -18,6 +19,7 @@ plt.title("f(x) = x^3 - 13x - 12")
 plt.xlabel("x")
 plt.ylabel("y")
 plt.show()
+'''
 
 #Zeroes appear to be at -3, -1, and 4
 
@@ -43,7 +45,7 @@ for i in range(0, 5):
         a = possibleRoot
 
 def error(val1, val2):
-    return 100 * (val1 - val2)/val2
+    return np.abs(100 * (val1 - val2)/val2)
 
 approximateErrors = [np.nan]
 for i in range(1, len(possibleRoots)):
@@ -59,10 +61,14 @@ df.index.name = "Iteration count"
 print(df)
 
 plt.figure()
-plt.plot(range(0, 5), possibleRoots)
+plt.plot(range(0, 5), possibleRoots, label="Root guesses")
+plt.grid("On")
+plt.xlabel("Number of terms")
+plt.ylabel("Y value estimater")
 plt.show()
 
 #Müller's method approaches zero much more quickly because it is a higher order approximation than the bisection method
-# The bisection method is a first order solution whereas Müller's method is a second order solution
+# The bisection method is a first order solution whereas Müller's method is a second order solution, which means Müller's method
+# converges much faster.
 
 

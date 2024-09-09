@@ -7,7 +7,7 @@ import math
 
 #finds percent error between two values
 def error(val1, val2):
-    return 100 * (val1 - val2)/val2
+    return np.abs(100 * (val1 - val2)/val2)
 
 #returns value for cosine derivatives
 def derivativeCos(x, level):

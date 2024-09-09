@@ -70,11 +70,11 @@ df.index = range(1, len(x)+1)
 
 
 print(df)
-
+''''
 plt.figure()
 plt.plot(x, y)
 plt.title("Profile of rod")
-
+'''
 plt.figure()
 plt.plot(x, Mt, label='M theta')
 plt.plot(x, My, label='M Y')
@@ -84,4 +84,5 @@ plt.ylabel("Moment")
 plt.legend()
 plt.show()
 
-#
+#The second derivative of the y values matches the expected curve for more values than the derivative of the slope. This means that taking the second
+# derivative of the y values is a more accurate method
