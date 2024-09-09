@@ -11,7 +11,7 @@ def f(x):
 x = np.arange(-5, 5, .1)
 y = f(x)
 
-'''
+
 plt.figure()
 plt.plot(x,y)
 plt.grid("on")
@@ -19,7 +19,7 @@ plt.title("f(x) = x^3 - 13x - 12")
 plt.xlabel("x")
 plt.ylabel("y")
 plt.show()
-'''
+
 
 #Zeroes appear to be at -3, -1, and 4
 
@@ -64,7 +64,7 @@ plt.figure()
 plt.plot(range(0, 5), possibleRoots, label="Root guesses")
 plt.grid("On")
 plt.xlabel("Number of terms")
-plt.ylabel("Y value estimater")
+plt.ylabel("Root value estimate")
 plt.show()
 
 #Müller's method approaches zero much more quickly because it is a higher order approximation than the bisection method
