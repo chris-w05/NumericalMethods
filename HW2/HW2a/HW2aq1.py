@@ -8,9 +8,9 @@ import math
 #finds percent error between two values
 def error(val1, val2, abs=False):
     if abs:
-        return np.abs(100 * (val1 - val2)/val2)
+        return np.abs(100 * (val2 - val1)/val2)
     else:
-        return 100 * (val1 - val2)/val2
+        return 100 * (val2 - val1)/val2
 
 #returns value for cosine derivatives
 def derivativeCos(x, level):
@@ -49,6 +49,7 @@ for n in nVals:
 #plotting
 print(math.cos(1))
 print(values)
+print(derivativeCos(.25, 0))
 
 plt.figure(figsize=(10,8))
 plt.plot(nVals,trueErrors)
