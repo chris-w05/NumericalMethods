@@ -35,11 +35,11 @@ def error(P0, P1, r, h, dP0, dP1, dr, dh):
     gradV = np.abs((P1 * math.log(P1/P0) + P0 - P1) * (gradh + gradr))
     print(f'Error from p0: {gradP0:.5} Joules \nError from P1: {gradP1:.5} Joules')
     print(f'Error from V: {gradV:.5} Joules')
-    print(f'\tError from r: {gradr:.5} m^3\n\tError from h: {gradh:.5} m^3')
+    print(f'Volume Errors:\n\tError from r: {gradr:.5} m^3\n\tError from h: {gradh:.5} m^3')
     return gradP0 + gradP1 + gradV
 
-print(f'Total error: {error(P0, P1, r, h, dP0, dP1, dr, dh)}' )
+print(f'Total error: {error(P0, P1, r, h, dP0, dP1, dr, dh):.5} Joules' )
 # Taking these results, the largest error is from the measurements on the tank, mainly because errors are compounded
-#when the volume is found, and then further compounded when used in the energy equation
+# when the volume is found, and then further compounded when used in the energy equation
 #Because the largest source of error is from the measurement of the volume of the tank, additional pressure
 #sensors are unlikely to be worthwhile

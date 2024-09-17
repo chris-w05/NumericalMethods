@@ -53,12 +53,12 @@ plt.grid(True)
 #plt.show()
 
 # Newton-Raphson result
-tolerance = 1 * 10**-20
+tolerance = 1 * 10**-8
 root, iterations = newtonRaphson(dydx, d2ydx2, 7.5, tolerance)
-print(f'Zero estimated at: {root} in {iterations} iterations with tolerance of {tolerance}')
+print(f'Zero estimated at: {root}\" in {iterations} iterations with tolerance of {tolerance}')
 
 # Zero using scipy
 zero_scipy = scipy.optimize.fsolve(dydx, 7.5)
-print(f'Zero found using scipy: {zero_scipy[0]}')
+print(f'Zero found using scipy: {zero_scipy[0]}\"')
 
 #The Newton-Raphson result matches the result using scipy
