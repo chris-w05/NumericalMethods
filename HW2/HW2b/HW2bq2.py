@@ -14,7 +14,7 @@ dP1 = 6894.76       #pascal -> 1psi
     
 def errorV(r, h, dr, dh):
     #returns partial derivates in terms of r and h
-    return [np.abs(math.pi * ( 2*r*h*dr)) , 
+    return [np.abs(math.pi*2*r*h*dr) , 
             np.abs(math.pi * r**2 * dh) ]
     
 def exergy(P0, P1, r, h):
@@ -37,16 +37,20 @@ def error(P0, P1, r, h, dP0, dP1, dr, dh):
     #partial derivatives by
     gradP0 = np.abs((V - (P1*V)/P0) * dP0)
     gradP1 = np.abs((V * math.log(P1/P0)) * dP1)
-    gradh , gradr = errorV(r,h,dr, dh)
-    gradV = np.abs((P1 * math.log(P1/P0) + P0 - P1) * (gradh + gradr))
+    dVr , dVh = errorV(r,h,dr, dh)
+    gradr = np.abs((P1 * math.log(P1/P0) + P0 - P1) * (dVr))
+    gradh = np.abs((P1 * math.log(P1/P0) + P0 - P1) * (dVh))
     print(f'Error from p0: {gradP0:.5} Joules \nError from P1: {gradP1:.5} Joules')
-    print(f'Error from V: {gradV:.5} Joules')
-    print(f'Volume Errors:\n\tError from r: {gradr:.5} m^3\n\tError from h: {gradh:.5} m^3')
-    return gradP0 + gradP1 + gradV
+    print(f'Error from r: {gradr:.5} Joules')
+    print(f'Error from h: {gradh:.5} Joules')
+    print(f'Volume Errors:\n\tError from r: {dVr:.5} m^3\n\tError from h: {dVh:.5} m^3')
+    return gradP0 + gradP1 + gradh + gradr
 
 
 error = error(P0, P1, r, h, dP0, dP1, dr, dh)
 print(f'Total error: {error:.5} Joules' )
 print(f'Exergy = {exergy(P0, P1, r, h):.5} ± {error:.5} Joules') 
+
+
 # Since the largest error is from the error in P1 (the pressure inside the tank) it would make sense to invest 
 # in better pressure sensors inside the tank.
