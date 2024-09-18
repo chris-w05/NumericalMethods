@@ -2,25 +2,30 @@ import math
 import numpy as np
 
 
-P0 = 88113          #pascals
-P1 = P0 + 344738    #pascals
+P0 = 88113.8        #pascals
+P1 = P0 + 344737.9  #pascals
 r = .1143           #meters
 h = .55             #meters
 #Errors
-dr = .0254          #meters
-dh = .0254          #meters
-dP0 = 16.93194      #pascal
-dP1 = 13789.5       #pascal 
+dr = .0015875       #meters -> 1/16 in
+dh = .0015875       #meters -> 1/16 in
+dP0 = 16.93194      #pascal -> .005 inHg
+dP1 = 6894.76       #pascal -> 1psi
     
 def errorV(r, h, dr, dh):
+    #returns partial derivates in terms of r and h
     return [np.abs(math.pi * ( 2*r*h*dr)) , 
             np.abs(math.pi * r**2 * dh) ]
+    
+def exergy(P0, P1, r, h):
+    V = np.pi * r**2 * h
+    return P1 * V * (math.log(P1/P0) + (P0/P1) - 1)
 
 def error(P0, P1, r, h, dP0, dP1, dr, dh):
     """
     Arguments:
         P0 (Pascals) : Pressure outside tank
-        P1 (Pascals) : Pressure insite tank
+        P1 (Pascals) : Pressure inside tank
         r (meters): Radius of tank
         h (meters): Height of tank
         dP0 (Pascals) : Pressure uncertainty outside tank
@@ -29,6 +34,7 @@ def error(P0, P1, r, h, dP0, dP1, dr, dh):
         dh (meters): Height uncertainty
     """
     V = math.pi * r**2 * h
+    #partial derivatives by
     gradP0 = np.abs((V - (P1*V)/P0) * dP0)
     gradP1 = np.abs((V * math.log(P1/P0)) * dP1)
     gradh , gradr = errorV(r,h,dr, dh)
@@ -38,8 +44,9 @@ def error(P0, P1, r, h, dP0, dP1, dr, dh):
     print(f'Volume Errors:\n\tError from r: {gradr:.5} m^3\n\tError from h: {gradh:.5} m^3')
     return gradP0 + gradP1 + gradV
 
-print(f'Total error: {error(P0, P1, r, h, dP0, dP1, dr, dh):.5} Joules' )
-# Taking these results, the largest error is from the measurements on the tank, mainly because errors are compounded
-# when the volume is found, and then further compounded when used in the energy equation
-#Because the largest source of error is from the measurement of the volume of the tank, additional pressure
-#sensors are unlikely to be worthwhile
+
+error = error(P0, P1, r, h, dP0, dP1, dr, dh)
+print(f'Total error: {error:.5} Joules' )
+print(f'Exergy = {exergy(P0, P1, r, h):.5} ± {error:.5} Joules') 
+# Since the largest error is from the error in P1 (the pressure inside the tank) it would make sense to invest 
+# in better pressure sensors inside the tank.
