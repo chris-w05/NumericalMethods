@@ -1,5 +1,4 @@
 import numpy as np
-from bisection import bisection
 
 def colebrook_equation(f, e, D, Re):
     #in form f(x) = 0
