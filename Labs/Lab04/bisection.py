@@ -2,16 +2,17 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 
-def bisection( fun, a, b, tol=1e-6, maxits=10, plot_output=False):
-    if np.sign(a) == np.sign(b):
-        raise ValueError
+def bisection( fun, a, b, tol=1e-6, maxits=10, plot_output=False, return_iters=False):
+    if np.sign(fun(a)) == np.sign(fun(b)):
+        raise ValueError("No root guaranteed")
     iters = 0
+    oldC = None
     while iters < maxits:
-        iters = iters + 1
-        c = (a + b)/2
+        iters += 1
+        c = (a + b) / 2
         if iters > 1:
-            errorApprox = (c - oldC)/c
-            if np.abs(b-a)/2 < tol or np.abs(errorApprox) <= tol:
+            errorApprox = (c - oldC) / c
+            if np.abs(b - a) / 2 < tol or np.abs(errorApprox) <= tol:
                 break
         
         if plot_output:
@@ -27,22 +28,28 @@ def bisection( fun, a, b, tol=1e-6, maxits=10, plot_output=False):
             plt.ylabel('Function value')
             plt.xlabel('X values')
         
-        if np.sign(c) == np.sign(fun(a)):
+        if np.sign(fun(c)) == np.sign(fun(a)):
             a = c
         else:
             b = c
         oldC = c
     
     if iters == maxits:
-        raise RuntimeError
+        raise RuntimeError(f"Maximum number of iterations exceeded: {iters} iterations")
     
     if plot_output:
         plt.show()
     
-    return c
+    if return_iters:
+        return iters
+    else:
+        return c
 
-def func(x):
-    return x**3
 
-bisection(func, -2, 2, plot_output=True )
+def expected_iterations(a, b, error):
+    return math.log((b-a)/error)/math.log(2)
 
+#Validation:
+func = lambda x: x**2 - 1
+x = bisection(func, .5, 1, maxits=20, plot_output=True)
+print(f'x root at: {x}')
