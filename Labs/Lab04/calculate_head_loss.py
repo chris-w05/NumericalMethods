@@ -8,15 +8,16 @@ rho = 1000  # Fluid density kg/m^3
 mu = 6e-4   # Dynamic viscosity Pa.s
 V = 10      # Fluid velocity m/s
 Re = (rho * V * D) / mu #Reynolds number
+g = 9.8     #m/s^2
+L = 110     #m
+
 #Determining type of flow
 print(f'Reynold\'s number is {Re:.5}')
 if Re > 2300:
     print("Flow is turbulent")
 else:
     print("Flow is laminar")
-g = 9.8     #m/s^2
-L = 110
-
+    
 #bisection params:
 a = .001
 b = .1

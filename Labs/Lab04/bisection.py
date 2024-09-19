@@ -22,7 +22,7 @@ def bisection( fun, a, b, tol=1e-6, maxits=10, plot_output=False, return_iters=F
         
         #plotting
         if plot_output:
-            plt.figure()
+            plt.figure(figsize=(10,6))
             xVals = np.linspace(a, b, 50)
             yVals = list(map(lambda x: fun(x), xVals))
             plt.plot(xVals, yVals )
