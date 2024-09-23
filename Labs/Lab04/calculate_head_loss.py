@@ -38,9 +38,9 @@ print(f'The resulting head loss is {head_loss:.5} meters')
 
 #Analyzing number of iterations expected vs experimental
 tolerance = .01
-expect_iterations = expected_iterations(0, 3, tolerance)
-func = lambda x: x**2 - 1
-actual_iterations = bisection(func, 0, 3, tol=tolerance, maxits=100, return_iters=True)
+expect_iterations = expected_iterations(0.001, 1, tolerance)
+func = lambda x: colebrook_equation(x, e, D, Re)
+actual_iterations = bisection(func, 0.001, 1, tol=tolerance, maxits=100, return_iters=True)
 print(f'For a tolerance of {tolerance}, expect to use {expect_iterations:.5} iterations.')
 print(f'My code used {actual_iterations} iterations to find a root with {tolerance} tolerance')
 
