@@ -80,6 +80,6 @@ for for the increase in water density by depth.
 
 I saw very minimal differences between my answer using the analytical vs numerical derivative,
 specifically a 6.787*10^-16 percent difference, which is negligible at best. This error could 
-become much larger if a smaller dx is used in the central difference approximation
+become much larger if a larger dx is used in the central difference approximation
 
 '''
