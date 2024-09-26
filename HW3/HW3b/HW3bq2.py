@@ -4,51 +4,50 @@ array = np.array([[5, 1, -.5, 13.5],
                   [-6, -12, 4, -123],
                   [-2, 2, 10, -43]])
 
-def reduce(array, printSteps=False):
-    rows = len(array)
-    cols = len(array[0])
-    
-    U = np.array(array, dtype=float)  # Copy of array for U (upper triangular)
-    L = np.array(rows)  # Identity matrix for L (lower triangular)
-    
-    print(L)
-    # Create upper triangle (U matrix)
-    for k in range(0, rows):
-        if printSteps:   
-            print(f"Pivot row (U): {k}")
-        for i in range(k+1, rows):
-            s = U[i][k] / U[k][k]
-            for j in range(k, cols):
-                U[i][j] = U[i][j] - s * U[k][j]
-            if printSteps:   
-                print("Step in U matrix:")
-                print(U)
-                print()
-    
-    
-    #Create lower triangle
-    for k in range(0, rows):
-        if printSteps:   
-            print(f"Pivot row (U): {k}")
-        for i in range(0, k):
-            s = L[i][k] / L[k][k]
-            for j in range(k, cols):
-                L[i][j] -= s * L[k][j]
-            if printSteps:   
-                print("Step in U matrix:")
-                print(L)
-                print()
-                
-    # Normalize L by dividing each element by the pivot
-    for m in range(0, rows):
-        leadingValue = L[m][m]
-        if leadingValue != 0:  # Avoid division by zero
-            for n in range(0, m+1):
-                L[m][n] /= leadingValue
-        if printSteps:   
-            print(L)
-            print()
-    
+
+def lu_decomposition(A):
+    n = len(A)
+    # Create zero matrices for L and U
+    L = np.zeros((n, n))
+    U = np.zeros((n, n))
+
+    # Decomposing matrix into Upper and Lower triangular matrices
+    for i in range(n):
+        #Find upper triangle
+        for k in range(i, n):
+            sum_upper = sum(L[i][j] * U[j][k] for j in range(i))
+            U[i][k] = A[i][k] - sum_upper
+
+        #Find lower triangle
+        for k in range(i, n):
+            if i == k:
+                L[i][i] = 1  # Diagonal as 1
+            else:
+                sum_lower = sum(L[k][j] * U[j][i] for j in range(i))
+                L[k][i] = (A[k][i] - sum_lower) / U[i][i]
+
     return L, U
 
-L, U = reduce(array, printSteps=False)
+def __forward_substitution(L, U, b):
+    n = len(L)
+    d = np.zeros(n)
+    d[0] = b[0]
+    #forward substitution
+    for i in range(1, n):
+        d[i] = b[i] - (sum(L[i][j]*d[j] for j in range(0, i)))
+    
+    #backwards substitution
+    x = np.zeros(n)
+    x[n-1] = d[n-1]/U[n-1][n-1]
+    for i in range(n-2, -1, -1):
+        x[i] = (d[i] - sum(U[i][j]*x[j] for j in range(i+1, n)))/U[i][i] 
+
+    return x
+
+def solve(A):
+    b = A[:, -1]
+    A = A[:, :-1]
+    L, U = lu_decomposition(A)
+    return __forward_substitution(L, U, b)
+
+print(solve(array))
