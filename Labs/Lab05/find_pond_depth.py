@@ -75,7 +75,8 @@ print(f'The difference between the two depth found is: {difference:.5}m which is
 I can verify my answer is correct by plugging my value of the depth back into the funciton
 to see if it matches the desired depth.
 
-My result of 2.6174m makes sense since a difference of 100kg/m^3 over ~2.5m seems appropriate
+My result makes sense because my result of 2.6174m is within the depth of the pond. Additionally
+my result of 2.6174m makes sense since a difference of 100kg/m^3 over ~2.5m seems appropriate
 for for the increase in water density by depth. 
 
 I saw very minimal differences between my answer using the analytical vs numerical derivative,
