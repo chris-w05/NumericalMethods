@@ -1,8 +1,8 @@
 import numpy as np
 
-array = np.array([[5, 1, -.5, 13.5],
-                  [-6, -12, 4, -123],
-                  [-2, 2, 10, -43]])
+array = np.array([[8, 4, -1, 11],
+                  [-2, 5, 1, 4],
+                  [2, -1, 6, 7]])
 
 
 def lu_decomposition(A):
