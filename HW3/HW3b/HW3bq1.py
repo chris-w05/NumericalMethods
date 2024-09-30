@@ -2,7 +2,7 @@ import numpy as np
 
 array = np.array([[5, 1, -.5, 13.5],
                   [-6, -12, 4, -123],
-                  [-2, 2, 10, -43]])
+                  [2, 2, 10, -43]])
 
 
 def reduce(array, printSteps=False):
