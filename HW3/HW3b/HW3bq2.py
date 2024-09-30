@@ -50,4 +50,6 @@ def solve(A):
     L, U = lu_decomposition(A)
     return __forward_substitution(L, U, b)
 
-print(solve(array))
+print(f'Solving {array}')
+x = solve(array)
+print(f'x1 = {x[0]}\nx2 = {x[1]}\nx3 = {x[2]}')

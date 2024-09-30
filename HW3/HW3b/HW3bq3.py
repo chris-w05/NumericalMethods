@@ -3,10 +3,10 @@ import numpy as np
 A = np.array([[6, -1, -1],
               [6, 9, 1],
               [-3, 1, 12]])
-b = np.array([50, 3, 40])
+b = np.array([3, 40, 50])
 
-solution = np.linalg.solve(A,b)
-print(f'Solution using built in funciton: x ={solution}')
+solution = np.linalg.solve(A, b)
+print(f'Solution using built-in function: x = {solution}')
 
 def solve(A, b, x, tol=1e-6, max_iter=10):
     n = len(b)
@@ -14,21 +14,22 @@ def solve(A, b, x, tol=1e-6, max_iter=10):
     while iter < max_iter:
         previous_x = x.copy()  # Make a full copy of the current solution
         for i in range(n):
-            sum = 0
+            sigma = 0
             for j in range(n):
                 if i != j:
-                    sum += A[i][j] * x[j]
-            x[i] = (b[i] - sum) / A[i][i]  # Gauss-Seidel update
+                    sigma += A[i][j] * x[j]
+            x[i] = (b[i] - sigma) / A[i][i]  # Gauss-Seidel update
         if max(np.abs(np.subtract(previous_x, x))) < tol:
-            #print("Convergence reached")
             return x
         iter += 1
 
+    print("Warning: Max iterations exceeded without convergence")
     return x
 
-initial_guess = np.array([1.0,1.0,1.0])
-x = solve(A, b, initial_guess)
+initial_guess = np.zeros(len(b))
+x = solve(A, b, initial_guess, tol=0.0005, max_iter=20)
 print(f'Solution using gauss-seidel: x = {x}')
+
 
 '''If the equations are not reordered, the algorithm is not guaranteed to converge.
 This emanates from updating of the x vector, where dividing a by a small diagonal value
