@@ -64,6 +64,7 @@ root = newton(fun, initialGuess, fun_deriv)
 depth = solar_pond(root, density, density_top, zone_height)
 print(f'The depth of the pond is {root:.5}m when the desired density is {density}kg/m^3')
 print(f'Plugging the root back into solar_pond yields {depth}')
+#Since this value is zero, it means that a root for scenario has been found
 
 root_numerical = newton(fun, initialGuess, fprime=None)
 print(f'The depth of the pond using a numerical approximation is {root_numerical:.5}m for a density of {density}kg/m^3')
