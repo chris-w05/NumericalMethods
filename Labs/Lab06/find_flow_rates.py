@@ -57,7 +57,7 @@ flow_rates = naive_gauss_elimination(systemA, systemB)
 for i in range(0, len(pipes)):
     pipedata[pipes[i]]['Flow'] = flow_rates[i]
     
-#Manually assigning flow rates for 3 pipes outside of system of equations
+#Manually assigning flow rates for 4 pipes outside of system of equations
 pipedata['EF']['Flow'] = pipedata['DE']['Flow']
 pipedata['CD']['Flow'] = pipedata['DE']['Flow']
 pipedata['FG']['Flow'] = pipedata['EF']['Flow'] + pipedata['CF']['Flow']
