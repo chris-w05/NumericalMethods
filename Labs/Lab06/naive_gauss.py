@@ -7,6 +7,7 @@ def naive_gauss_elimination(a,b):
         raise TypeError('A is not a square matrix')
     if len(a) != len(b):
         raise TypeError('A is not the same size as B')
+    
     #Forward elimination
     for k in range(0, n-1):
         for i in range(k+1, n):
