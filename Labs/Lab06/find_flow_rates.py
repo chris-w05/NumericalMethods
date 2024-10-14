@@ -11,19 +11,19 @@ g = 9.81            #m/s^2
 
 #pipedata dictionary
 pipedata = {
-    'AB' : {'l' : 5, 'D' : .01, 'R': None},
-    'BG' : {'l' : 5, 'D' : .005, 'R': None},
-    'CF' : {'l' : 5, 'D' : .002, 'R': None},
-    'DE' : {'l' : 5, 'D' : .003, 'R': None},
-    'BC' : {'l' : 10, 'D' : .005, 'R': None},
-    'CD' : {'l' : 10, 'D' : .0035, 'R': None},
-    'EF' : {'l' : 10, 'D' : .0025, 'R': None},
-    'FG' : {'l' : 10, 'D' : .0045, 'R': None}
+    'AB' : {'l' : 5, 'D' : .01, 'R': None, 'F':0, 'Re':None},
+    'BG' : {'l' : 5, 'D' : .005, 'R': None, 'F':0, 'Re':None},
+    'CF' : {'l' : 5, 'D' : .002, 'R': None, 'F':0, 'Re':None},
+    'DE' : {'l' : 5, 'D' : .003, 'R': None, 'F':0, 'Re':None},
+    'BC' : {'l' : 10, 'D' : .005, 'R': None, 'F':0, 'Re':None},
+    'CD' : {'l' : 10, 'D' : .0035, 'R': None, 'F':0, 'Re':None},
+    'EF' : {'l' : 10, 'D' : .0025, 'R': None, 'F':0, 'Re':None},
+    'FG' : {'l' : 10, 'D' : .0045, 'R': None, 'F':0, 'Re':None}
 }
 
 #Find fluid resistance and add it to dictionary
 def fluid_resistance(mu, pipedata, g=9.81):
-    for key, pipe in pipedata.items():
+    for pipe in pipedata.items():
         l = pipe['l']
         D = pipe['D']
         R = 128*mu*l/(np.pi * D**4)
@@ -58,32 +58,37 @@ systemB = [0, 0, dP0, 0, 0]
 #Solve system of equations using naive gauss eliminaiton
 pipes = ['AB', 'BC', 'BG', 'CF', 'DE'] # = [Q0, Q1, Q2, Q3, Q4]
 flow_rates = naive_gauss_elimination(systemA, systemB)
+for i in range(0, len(pipes)):
+    pipedata[pipes[i]]['F'] = flow_rates[i]
+    
+#Manually assigning flow rates for 3 pipes outside of system of equations
+pipedata['EF']['F'] = pipedata['DE']['F']
+pipedata['CD']['F'] = pipedata['DE']['F']
+pipedata['FG']['F'] = pipedata['EF']['F'] + pipedata['CF']['F']
+
+
 #displaying flow rates
 pipesFlows = {
     ('Pipe') : pipes,
     ('Flow rate'): flow_rates
 }
-df0 = pd.DataFrame(pipesFlows)
+df0 = pd.DataFrame(pipedata)
 print(df0)
 
 #Finding reynolds numbers and reporting if they are turbulent
-all_pipes = ['AB', 'BG', 'CF', 'DE', 'GH', 'BC', 'CD', 'EF', 'FG']
-reynolds_numbers = np.zeros_like(all_pipes)
-for i in range(0, len(pipes)):
-    D = pipedata[pipes[i]]['D']
-    V = flow_rates[i] / (np.pi * (D/2)**2)  # Velocity
+all_pipes = ['AB', 'BG', 'CF', 'DE', 'BC', 'CD', 'EF', 'FG']
+reynolds_numbers = np.zeros(8)
+for i in range(0, len(all_pipes)):
+    D = pipedata[all_pipes[i]]['D']
+    V = pipedata[all_pipes[i]]['F'] / (np.pi * (D/2)**2)  # Velocity
     reynolds_numbers[i] = reynolds(V, D)
+    pipedata[all_pipes[i]]['Re'] = reynolds(V,D)
     
     # Check if flow is turbulent
     if reynolds_numbers[i] > 2000:
-        print(f'Turbulent flow detected in pipe {pipes[i]} (Re = {reynolds_numbers[i]:.2f})')
+        print(f'Turbulent flow detected in pipe {all_pipes[i]} (Re = {reynolds_numbers[i]:.2f})')
 
 #Displaying final data
-data = {
-    ('Pipe'): pipes,
-    ('Flow rates'): flow_rates,
-    ('Reynolds numbers'): reynolds_numbers
-}
 
-df = pd.DataFrame(data)
+df = pd.DataFrame(pipedata)
 print(df)
