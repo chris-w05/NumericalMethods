@@ -83,9 +83,9 @@ def bisection(a, b, tol=0.001):
     return (a + b) / 2
 
 # Plotting
-# plt.figure()
-# plt.plot(x, y, label="g(f)")
-# plt.axhline(0, color='gray', linewidth=0.5)  # Add a horizontal line at y=0
+plt.figure()
+plt.plot(x, y, label="g(f)")
+plt.axhline(0, color='gray', linewidth=0.5)  # Add a horizontal line at y=0
 
 # Execute bisection and plot root
 guess = bisection(0.00001, 1)
@@ -93,8 +93,8 @@ if guess is not None:
     z = np.zeros(len(roots))  # Define z after finding the root
     plt.plot(roots, z, marker='*', linestyle='None', color='red', label="Roots")
 
-# plt.legend()
-# plt.show()
+plt.legend()
+plt.show()
 
 print("Root guess:", guess)
 print(g(guess))
