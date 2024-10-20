@@ -27,8 +27,41 @@ print(c)
 c = np.zeros(3)
 for i in range(0,3):
     c[i] = np.sum( A[i][:] * b[:])
-    
+
 print(c)
+
+#Redoing matric problems
+#Just in case:
+x = [0, 1, 2, 3, 4]
+y = [1, 4, 2, 7, 1]
+
+deg = len(x)
+constants = np.polyfit(x, y, deg )    
+func = np.poly1d(constants)
+
+vec = np.zeros(deg)
+for i in range(0,deg):
+    vec[i] = func(i)
+b =vec
+print(vec)
+
+rows, cols = 5,5
+vec = np.zeros( (rows,cols))
+for i in range(0, rows):
+    for j in range(0, cols):
+        vec[i][j] = i*cols + j
+A = vec
+print(vec)
+
+#dot product:
+c = np.zeros_like(b)
+for i in range(0,len(A)):
+    c[i] = np.sum( A[i][:] * b[:])
+print(c)
+print(np.matmul(A, b))
+
+
+    
         
 #root finding:
 e = 1.43e-6
@@ -82,10 +115,11 @@ def bisection(a, b, tol=0.001):
     
     return (a + b) / 2
 
-# Plotting
-plt.figure()
-plt.plot(x, y, label="g(f)")
-plt.axhline(0, color='gray', linewidth=0.5)  # Add a horizontal line at y=0
+
+# # Plotting
+# plt.figure()
+# plt.plot(x, y, label="g(f)")
+# plt.axhline(0, color='gray', linewidth=0.5)  # Add a horizontal line at y=0
 
 # Execute bisection and plot root
 guess = bisection(0.00001, 1)
@@ -93,11 +127,78 @@ if guess is not None:
     z = np.zeros(len(roots))  # Define z after finding the root
     plt.plot(roots, z, marker='*', linestyle='None', color='red', label="Roots")
 
-plt.legend()
-plt.show()
+# plt.legend()
+# plt.show()
 
 print("Root guess:", guess)
 print(g(guess))
+
+
+#Fixed point method:
+def nextVal(guess):
+    Re = rho * V * D / mu
+    return (1/(-2.0*np.log((e/3.7*D) + 2.51/(Re*np.sqrt(guess)))))**2
+
+def fixedPoint( guess, function, tol=1e-6):
+    error = 1
+    while error > tol:
+        previousGuess = guess
+        guess = function(guess)
+        error = (guess - previousGuess)/guess
+    return guess
+
+root = fixedPoint( 1, nextVal)
+print(root)
+
+#Secant method:
+def secantMethod( a, b, function, tol=1e-6):
+    error = 1
+    while np.abs(error) > tol:
+        print(f'A = {a}, B = {b}')
+        ay = g(a)
+        by = g(b)
+        m = (by - ay)/(b - a)
+        new_a = a - g(a)/m
+        a,b = b, new_a
+        error = (a-b)/a
+        print(f'error = {error}')
+    return a
+
+#print(secantMethod( 0.001, .5 , g))
+#Secant method is not suited to values near asymptotes
+
+
+#False position method:
+def falsePosition(a, b, function, tol=1e-6):
+    error = 1
+    fa = function(a)
+    fb = function(b)
+    
+    if fa * fb > 0:
+        print("No root in the interval")
+        return None
+    
+    while np.abs(error) > tol:
+        # False position formula
+        c = (a * fb - b * fa) / (fb - fa)
+        fc = function(c)
+        
+        if fa * fc < 0:  # Root is between a and c
+            b = c
+            fb = fc
+        else:  # Root is between c and b
+            a = c
+            fa = fc
+        
+        # Update the error
+        error = function(c)
+    
+    return c
+
+print(f'False position: {falsePosition(.001, .1, g)}')
+
+
+
 
 # Linear system:
 
