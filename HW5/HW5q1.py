@@ -3,14 +3,18 @@ import matplotlib.pyplot as plt
 from eulers import solveSystemEulers
 from RK4 import RK4
 
+#derivative functions -----------------
 def dydt(t, y, z):
     return -2*y + 4*np.e**(-t)
 
 def dzdt(t, y, z):
     return -y*z**2/3
+#--------------------------------------
 
-
+#Finding solutions using eulers
 y, z, tRange = solveSystemEulers( [dydt, dzdt] , 2, 4, 0, 1, .1)
+
+#Finding solution using runge kutta
 f = [dydt, dzdt]
 y0 = [2, 4]
 tRange, yR = RK4(0, y0, f, .1, 1 )
