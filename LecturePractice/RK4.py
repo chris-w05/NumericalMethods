@@ -17,23 +17,24 @@ def RK4(t0, y0, f, h, tf):
     return tRange, y
 
 def F(t, y1, y2):
-    return 20*np.sin(t)
+    return 0
 
 def f1(t, y1, y2):
     return y2
 
 def f2(t, y1, y2):
     c = 120
-    m = 100
+    m = 200
     k = 10
-    return (-c*y2 - k*y1 + F(t, y1, y2))/m
+    sign = np.sign((-c*y2 - k*y1 + F(t, y1, y2))/m)
+    return np.sqrt(np.abs((-c*y2 - k*y1 + F(t, y1, y2))/m))*sign
 
 
 
 f = [f1, f2]
 t0 = 0
 y0 = [2, 3]
-tRange, y = RK4(t0, y0, f, 0.001, 30)
+tRange, y = RK4(t0, y0, f, 0.001, 60)
 
 # Plotting the results
 plt.plot(tRange, y[:, 0], label='position')
