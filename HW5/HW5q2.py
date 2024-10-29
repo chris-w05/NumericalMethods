@@ -54,3 +54,8 @@ plt.xlabel('t')
 plt.ylabel('y')
 plt.legend()
 plt.show()
+
+#As the damping coefficient increases the motion of the spring goes from 
+# a wave like motion to an exponential decay motion. The critically damped scenario
+# is the point at which the function is between the two cases of a wave and exponential.
+#As c increases, it takes longer and longer for the block to reach its equilibrium state. 

@@ -1,5 +1,6 @@
 import numpy as np
 
+#solves a system of equations using eulers methods
 def solveSystemEulers( functions, y0, z0, t0, tf, h ):
     tRange = np.arange(t0, tf, h )
     y = np.zeros_like(tRange)
@@ -8,6 +9,7 @@ def solveSystemEulers( functions, y0, z0, t0, tf, h ):
     y[0] = y0
     z[0] = z0
     
+    # yi = yi-1 + f(...)*h
     for i in range( 1, len(tRange) ):
         y[i] = y[i-1] + functions[0]( tRange[i-1], y[i-1], z[i-1]) * h
         z[i] = z[i-1] + functions[1]( tRange[i-1], y[i-1], z[i-1]) * h
