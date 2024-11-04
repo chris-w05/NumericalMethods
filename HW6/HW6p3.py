@@ -21,7 +21,7 @@ def F(x):
     return -c*Tinf
 
 plt.figure()
-h = .5
+h = .04
 params = [1/h**2 ,          #alpha
         -2/h**2 - c,        #beta
         1/h**2 ]            #gamma
