@@ -3,7 +3,7 @@ from fpdf import FPDF
 def save_script_as_pdf(input_file, output_file):
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Courier", size=8)  # Use 'Courier' for monospace, set size smaller
+    pdf.set_font("courier", size=8)  # Use 'Courier' for monospace, set size smaller
 
     line_height = pdf.font_size * 1.2  # Single line spacing
 
@@ -15,8 +15,8 @@ def save_script_as_pdf(input_file, output_file):
     print(f"PDF created successfully at {output_file}")
 
 # Specify your file paths
-folder = "HW3/HW3b/"
-fileName = "HW3bq3"
+folder = "HW5/"
+fileName = "HW5q1"
 input_file = folder + fileName + ".py"  
 output_file = folder + fileName + ".pdf"  
 
