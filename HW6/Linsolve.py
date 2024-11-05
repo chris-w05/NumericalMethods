@@ -20,16 +20,20 @@ def BVPsolve(xi, xf, yi, yf, h, params, F, solveMethod='Gauss'):
     A = A + np.diag(gamma * np.ones(num_interior_nodes - 1), 1)
     A = A + np.diag(alpha * np.ones(num_interior_nodes - 1), -1)
 
+    #Solve matrix
     if solveMethod == 'Seidel':
         x = np.random.random(len(bVector)) * 10*( yi + yf)/2
         interior_nodes = seidel_solve(A, bVector, x)
     else:
         interior_nodes = naive_gauss_elimination(A, bVector)
+    
+    #output results including boundary conditions
     output =[yi]
     output.extend(interior_nodes)
     output.append(yf)
     return output, tVals
 
+#from another HW
 def seidel_solve(A, b, x, tol=1e-6, max_iter=1000):
     n = len(b)
     iter = 0
@@ -49,7 +53,7 @@ def seidel_solve(A, b, x, tol=1e-6, max_iter=1000):
     return x
 
 
-
+#from another HW
 def naive_gauss_elimination(a,b):
     #size checking:
     m,n = np.shape(a)

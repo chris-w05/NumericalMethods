@@ -32,3 +32,5 @@ plt.xlabel('x [ft]')
 plt.ylabel('temperature [K]')
 plt.legend()
 plt.show()
+
+#The results from my computed results match my results by hand - bless up

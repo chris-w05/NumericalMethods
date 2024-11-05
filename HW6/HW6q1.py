@@ -6,6 +6,7 @@ def F(x):
     return -x
 
 plt.figure()
+#Plot results for different sizes of h
 for i in [5, 2.5, 1.25, .625, .0375]:
     params = [7/i**2 + 1/i ,    #alpha
               -14/i**2 - 1,     #beta
