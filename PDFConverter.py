@@ -15,8 +15,8 @@ def save_script_as_pdf(input_file, output_file):
     print(f"PDF created successfully at {output_file}")
 
 # Specify your file paths
-folder = "HW5/"
-fileName = "HW5q1"
+folder = "HW6/"
+fileName = "Linsolve"
 input_file = folder + fileName + ".py"  
 output_file = folder + fileName + ".pdf"  
 
