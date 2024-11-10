@@ -43,3 +43,24 @@ for i in range(4):
     axs[0].legend(loc='upper right')
     plt.show()
 
+
+# Parameter: Beta
+# Beta changes how fast the epidemic spreads, so a higher beta value will correlate with a faster
+# growth rate for the infected population. 
+
+# Parameter: muL
+# muL determines how long before the latent population becomes infected. This means that for an increase
+# in muL, there will be a larger and larger latent population. A higher muL value also slows down how fast
+# an infection spreads.
+
+# Parameter: muI
+# muI determines the length of time for an infected population moves to the removed/recoved stage. Incresing
+# muI decreases the proportion of the population that becomes infected. 
+
+# Parameter: e
+# e controls infections from external sources. increasing the value of e will make the epidemic progress faster.
+# Similarly, a smaller e value will lead to a slower development of the epidemic.
+
+# Conclusion:
+# I would target decreasing muI to limit the spread of the disease. This variable was the only variable that significantly
+# reduced the peak of the infected population. 
