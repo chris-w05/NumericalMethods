@@ -1,3 +1,0 @@
-The total acceleration vector begins as a vector tangent to the velocity vector of the car, but then as the car accelerates along the curve there is more and more acceleration in the normal direction. Because the normal acceleration follows the equation of a = v^2/r and the tangential velocity is linearly increasing, the normal velocity increases exponentially. 
-
-The direction of the total acceleration approaches 90 degrees relative to the tangential direction because the normal acceleration’s magnitude approaches infinity as t approaches infinity whereas the tangential acceleration is constant. This follows as arctan( infinity/constant ) = 90 degrees. 
