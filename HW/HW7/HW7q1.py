@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 def newtonRaphson( func, delta, guess, tolerance= 1 * 10**-10, maxIterations=10):
     nIterations = 0
@@ -33,7 +34,7 @@ def polynomial(x):
     #determinant
     return (2-x)*((4-x)*(7-x) - 5*5) - 8*( 8*(7-x) - 5*10) + 10*(8*5 - (4-x)*10)
 
-def power_method(A, number_iterations=5, option='ones'):
+def power_method(A, number_iterations=5, option='ones', return_errors=False):
     count = 0
     lambda_prev = 1
     errors_max = np.zeros(number_iterations)
@@ -72,6 +73,8 @@ def power_method(A, number_iterations=5, option='ones'):
         count += 1
     
     lambda_min_new = 1/lambda_min_new
+    if not return_errors:
+        return lambda_max_new, lambda_min_new
     return lambda_max_new, lambda_min_new, errors_max, errors_min
 
 
@@ -101,7 +104,7 @@ def power_method_AI(A, num_iterations):
         # Calculate the approximate relative error
         error = np.linalg.norm(np.dot(A, b_k) - largest_eigenvalue * b_k) / np.linalg.norm(np.dot(A, b_k))
         
-        print(f"Largest Eigenvalue Iteration {i+1}: {largest_eigenvalue}, Error: {error}")
+        print(f"AI Largest Eigenvalue Iteration {i+1}: {largest_eigenvalue:.3}, Error: {error:.3}")
     
     # Inverse power method for smallest eigenvalue
     smallest_eigenvalue = None
@@ -116,12 +119,12 @@ def power_method_AI(A, num_iterations):
         b_k = b_k1 / b_k1_norm
         
         # Approximate eigenvalue (inverse of the largest eigenvalue of A^-1)
-        smallest_eigenvalue = 1 / np.dot(b_k.T, np.dot(A, b_k))
+        smallest_eigenvalue = 1/np.dot(b_k.T, np.dot(A, b_k))
         
         # Calculate the approximate relative error
-        error = np.linalg.norm(np.dot(A, b_k) - (1/smallest_eigenvalue) * b_k) / np.linalg.norm(np.dot(A, b_k))
+        error = np.linalg.norm(np.dot(A, b_k) - 1/(smallest_eigenvalue) * b_k) / np.linalg.norm(np.dot(A, b_k))
         
-        print(f"Smallest Eigenvalue Iteration {i+1}: {smallest_eigenvalue}, Error: {error}")
+        print(f"AI Smallest Eigenvalue Iteration {i+1}: {smallest_eigenvalue:.3}, Error: {error:.3}")
     return largest_eigenvalue, smallest_eigenvalue
 # -----------------------------------------------------------
 
@@ -130,16 +133,19 @@ root1, iters = newtonRaphson(polynomial, .001, 2)
 root2, iters = newtonRaphson(polynomial, .001, -7)
 root3, iters = newtonRaphson(polynomial, .001, 15)
 
-x = np.arange(-10, 20, .01)
-y = [polynomial(i) for i in x]
+x_guesses = np.arange(-10, 20, .01)
+y = [polynomial(i) for i in x_guesses]
 
 # plt.figure()
 # plt.plot(x, y)
 # plt.title('Characteristic Equation')
 # plt.show()
 # print(f'roots: {root1}, {root2}, {root3}')
+
 # I found the roots by plotting the characteristic equation then taking guesses for where 
-# each of the roots are
+# each of the roots are, then putting those guesses as the initial values into my root finding method
+
+
 
 # power method:
 matrix = [
@@ -148,12 +154,26 @@ matrix = [
     [10, 5, 7]
 ]
 
-l1, l2, e1, e2 = power_method(matrix)
-print(l1)
-print(l2)
+l1, l2, e1, e2 = power_method(matrix, return_errors=True)
+data = {
+    'error lMax' : e1,
+    'error lMin' : e2
+}
+
+df = pd.DataFrame(data)
+df = df.rename_axis(index='Iteration')
+
+print(df)
+print(f'Largest eigenvalue, my code: {l1}')
+print(f'Smallest eigenvalue, my code: {l2}')
+print()
+
 
 print( power_method_AI(matrix, 5))
 
 # My code is better than the AI code because it gets the answer right. The AI code forgot to takw the
 # inverse of matrix A, Additionally my code is better because it has the ability to set what style of 
 # initial eigenvector is used, and uses parameter presets/overrides for simplicity. 
+
+# My code also has the additional functionality of returning the errors to analyze convergence. This could 
+# be a powerful tool when verifying a solution
