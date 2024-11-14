@@ -5,7 +5,7 @@ rk4 function
 """
 
 
-def rk4(odefun,current_time,dt,y0):  
+def rk4(odefun,t,dt,y0):  
     """  
     •odefun (callable) – Function to solve. The function dydt = odefun(t,y), for an integer t
     (time index) and a vector y, must return a vector dydt having the same shape as y that
@@ -24,10 +24,10 @@ def rk4(odefun,current_time,dt,y0):
     the equation defined in odefun.
     """
     #follow rk4 formula for one round
-    k1 = odefun(current_time,y0)
-    k2 = odefun(current_time + dt/2, y0 + dt*k1/2)
-    k3 = odefun(current_time + dt/2, y0 + dt*k2/2)
-    k4 = odefun(current_time + dt, y0 + dt*k3)
+    k1 = odefun(t,y0)
+    k2 = odefun(t + dt/2, y0 + dt*k1/2)
+    k3 = odefun(t + dt/2, y0 + dt*k2/2)
+    k4 = odefun(t + dt, y0 + dt*k3)
     #update y vec with weighted slope
     y = y0 + (k1 + 2*k2 + 2*k3 + k4)*dt/6
     return y

@@ -26,7 +26,6 @@ def SLIRPE_Model(t,y,params):
     L = y[1]
     I = y[2]
     R = y[3]
-    P = y[4]
     E = y[5]
     beta = params[0]
     mu_L = params[1]
@@ -36,7 +35,7 @@ def SLIRPE_Model(t,y,params):
     T_min = params[5]
     T_max = params[6]
     
-    T = 25
+    T = T[0]
     #calculate T unit:
     #since the time index is not being passed into SPIRPE, and temperatures are constant 
     #im setting the temperature to always be that of index 0
@@ -45,15 +44,14 @@ def SLIRPE_Model(t,y,params):
     elif T<T_min or T_max<T:
         T_unit = 0
      
-    
-    
-    dEdt = E  
-    dPdt = k * T_unit + dEdt            #total population 
-    dSdt = -1*(beta*S*I + dEdt) + dPdt  #susceptible population
-    dLdt = (beta*S*I + dEdt) - (L/mu_L) #latent population
-    dIdt = L/mu_L - I/mu_I              #infected population
-    dRdt = I/mu_I                       #removed(dead or recovered)
-     
-   
-    return np.array(([dSdt,dLdt,dIdt,dRdt,dPdt,dEdt]))
+      
+    dEdt = E   
+    dPdt = k * T_unit + dEdt #total population 
+    dSdt = -1*(beta*S*I + dEdt) + dPdt #susceptible population
+    dLdt = (beta*S*I + dEdt) - (L/mu_L)#latent population
+    dIdt = L/mu_L - I/mu_I #infected population
+    dRdt = I/mu_I #removed(dead or recovered)
+    dydt = np.array(([dSdt,dLdt,dIdt,dRdt,dPdt,dEdt]))
+
+    return dydt
 
